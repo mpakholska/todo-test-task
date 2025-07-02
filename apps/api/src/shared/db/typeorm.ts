@@ -1,22 +1,23 @@
-import { registerAs } from "@nestjs/config";
-import { config as dotenvConfig } from 'dotenv';
-import { TaskOrmEntity } from "../../task/infrastructure/persistance/task-typeorm.entity";
-import { DataSource, DataSourceOptions } from "typeorm";
+import { registerAs } from '@nestjs/config';
 
-dotenvConfig({ path: '.env' });
+import { TaskOrmEntity } from '../../task/infrastructure/persistance/task-typeorm.entity';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { config } from '../config/config';
 
-const config = {
-    type: 'postgres',
-    host: `localhost`,
-    port: `5433`,
-    username: `admin`,
-    password: `Appex@oft121`,
-    database: `admin`,
-    entities: [TaskOrmEntity],
-    migrations: [],
-    autoLoadEntities: true,
-    synchronize: false,
-}
+const configuration = {
+  type: config.db.type,
+  host: config.db.host,
+  port: config.db.port,
+  username: config.db.username,
+  password: config.db.password,
+  database: config.db.name,
+  entities: [TaskOrmEntity],
+  migrations: [],
+  autoLoadEntities: true,
+  synchronize: false,
+};
 
-export default registerAs('typeorm', () => config)
-export const connectionSource = new DataSource(config as DataSourceOptions);
+export default registerAs('typeorm', () => config);
+export const connectionSource = new DataSource(
+  configuration as DataSourceOptions,
+);
