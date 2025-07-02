@@ -3,6 +3,7 @@ import { registerAs } from '@nestjs/config';
 import { TaskOrmEntity } from '../../task/infrastructure/persistance/task-typeorm.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from '../config/config';
+import { Migration1751467533388 } from './migrations/1751467533388-migration';
 
 const configuration = {
   type: config.db.type,
@@ -12,7 +13,7 @@ const configuration = {
   password: config.db.password,
   database: config.db.name,
   entities: [TaskOrmEntity],
-  migrations: [],
+  migrations: [Migration1751467533388],
   autoLoadEntities: true,
   synchronize: false,
 };

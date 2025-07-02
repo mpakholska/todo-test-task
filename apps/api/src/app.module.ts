@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './shared/db/database.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, TaskModule],
   controllers: [],
   providers: [],
 })

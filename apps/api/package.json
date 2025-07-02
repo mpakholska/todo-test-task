@@ -22,7 +22,6 @@
     "migration:create": "npm run typeorm -- migration:create ./src/shared/db/migrations/migration",
     "migration:generate": "npm run typeorm -- -d ./src/shared/db/typeorm.ts migration:generate ./src/shared/db/migrations/migration",
     "migration:run": "npm run typeorm migration:run -- -d ./src/shared/db/typeorm.ts"
-
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

@@ -8,7 +8,7 @@ import { Task } from 'src/task/domain/entities/task.entity';
 @Injectable()
 export class TaskTypeOrmRepository implements TaskRepository {
   constructor(
-    @InjectRepository(TaskTypeOrmRepository)
+    @InjectRepository(TaskOrmEntity)
     private readonly repo: Repository<TaskOrmEntity>,
   ) {}
 
@@ -19,6 +19,8 @@ export class TaskTypeOrmRepository implements TaskRepository {
 
   async findAll(): Promise<Task[]> {
     const todos = await this.repo.find();
-    return todos.map((t) => new Task(t.id, t.title, t.completed));
+    return todos.map(
+      (t) => new Task(t.id, t.title, t.description, t.completed),
+    );
   }
 }
