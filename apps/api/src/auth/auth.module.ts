@@ -6,14 +6,17 @@ import { UserTypeOrmRepository } from './infrastructure/persistance/user-typeorm
 import { UserOrmEntity } from './infrastructure/persistance/user-typeorm.entity';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
+import { UserController } from './interfaces/user.controller';
+import { GetAllUsersUseCase } from './application/usecases/get-all-users.usecase';
 
 @Module({
   imports: [TaskModule, TypeOrmModule.forFeature([UserOrmEntity])],
-  controllers: [AuthController],
+  controllers: [AuthController, UserController],
   providers: [
     { provide: 'UserRepository', useClass: UserTypeOrmRepository },
     RegisterUserUseCase,
     LoginUserUseCase,
+    GetAllUsersUseCase,
   ],
 })
 export class AuthModule {}

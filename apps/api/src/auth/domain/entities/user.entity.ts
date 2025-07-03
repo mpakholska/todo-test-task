@@ -4,3 +4,7 @@ export class User {
     public password: string,
   ) {}
 }
+
+export class FetchedUser {
+  constructor(public login: string) {}
+}

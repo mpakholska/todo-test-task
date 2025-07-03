@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserRepository } from 'src/auth/domain/repositories/user.repository';
+import {
+  SafeUser,
+  UserRepository,
+} from 'src/auth/domain/repositories/user.repository';
 import { UserOrmEntity } from './user-typeorm.entity';
-import { User } from 'src/auth/domain/entities/user.entity';
+import { FetchedUser, User } from 'src/auth/domain/entities/user.entity';
 
 @Injectable()
 export class UserTypeOrmRepository implements UserRepository {
@@ -17,13 +20,13 @@ export class UserTypeOrmRepository implements UserRepository {
     await this.repo.save(orm);
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<SafeUser[]> {
     const users = await this.repo.find();
-    return users.map((t) => new User(t.login, t.password));
+    return users.map((t) => new FetchedUser(t.login));
   }
 
   async findOne(login: string): Promise<User | null> {
-      const user = await this.repo.findOne({where: {login}});
-      return user;
+    const user = await this.repo.findOne({ where: { login } });
+    return user;
   }
 }
