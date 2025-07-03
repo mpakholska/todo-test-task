@@ -22,6 +22,10 @@ export class EditTaskUseCase {
       task.description = dto.description;
     }
 
+    if (dto.completed !== undefined) {
+      task.completed = dto.completed;
+    }
+
     await this.repo.save(task);
 
     return { message: 'Task edited successfully' };
