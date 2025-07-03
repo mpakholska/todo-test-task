@@ -13,6 +13,9 @@ type Config = {
     password: string;
     name: string;
   };
+  jwt: {
+    secret: string;
+  };
 };
 
 export const config: Config = {
@@ -26,5 +29,8 @@ export const config: Config = {
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || '12456',
     name: process.env.DB_NAME || 'db',
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET || '1234',
   },
 };

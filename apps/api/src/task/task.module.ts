@@ -14,6 +14,6 @@ import { GetAllTasksUseCase } from './application/use-cases/get-all-tasks.usecas
     CreateTaskUseCase,
     GetAllTasksUseCase,
   ],
-  exports: [TypeOrmModule]
+  exports: [TypeOrmModule],
 })
 export class TaskModule {}

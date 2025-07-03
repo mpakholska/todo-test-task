@@ -10,7 +10,6 @@ export class CreateTaskUseCase {
 
   async execute(title: string, description: string): Promise<void> {
     const task = new Task(title, description);
-    const response = await this.repo.save(task);
-    console.log('response', response);
+    await this.repo.save(task);
   }
 }

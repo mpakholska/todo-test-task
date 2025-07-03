@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from '../config/config';
 import { TaskOrmEntity } from '../../task/infrastructure/persistance/task-typeorm.entity';
 import { UserOrmEntity } from '../../auth/infrastructure/persistance/user-typeorm.entity';
+import { Migration1751538377150 } from './migrations/1751538377150-migration';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { UserOrmEntity } from '../../auth/infrastructure/persistance/user-typeor
       password: config.db.password,
       database: config.db.name,
       entities: [TaskOrmEntity, UserOrmEntity],
-      migrations: [],
+      migrations: [Migration1751538377150],
       synchronize: false,
     }),
   ],
