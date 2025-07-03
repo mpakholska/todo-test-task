@@ -8,6 +8,7 @@ import { RegisterUserUseCase } from './application/usecases/register-user.usecas
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
 import { UserController } from './interfaces/user.controller';
 import { GetAllUsersUseCase } from './application/usecases/get-all-users.usecase';
+import { AuthGuard } from './infrastructure/guards/auth.guard';
 
 @Module({
   imports: [TaskModule, TypeOrmModule.forFeature([UserOrmEntity])],
@@ -17,6 +18,8 @@ import { GetAllUsersUseCase } from './application/usecases/get-all-users.usecase
     RegisterUserUseCase,
     LoginUserUseCase,
     GetAllUsersUseCase,
+    AuthGuard,
   ],
+  exports: [AuthGuard],
 })
 export class AuthModule {}
