@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskRepository } from 'src/task/domain/repositories/task.repository';
 import { Repository } from 'typeorm';
@@ -20,5 +20,29 @@ export class TaskTypeOrmRepository implements TaskRepository {
   async findAll(): Promise<Task[]> {
     const todos = await this.repo.find();
     return todos.map((t) => new Task(t.title, t.description, t.completed));
+  }
+
+  async findById(id: number): Promise<Task | null> {
+    const task = await this.repo.findOne({ where: { id } });
+    if (!task) return null;
+    return new Task(task.title, task.description, task.completed);
+  }
+
+  async update(id: number, task: Partial<Task>): Promise<Task | null> {
+    const existingTask = await this.repo.findOne({ where: { id } });
+    if (!existingTask) return null;
+
+    await this.repo.update(id, task);
+
+    const updatedTask = await this.repo.findOne({ where: { id } });
+
+    if (!updatedTask) {
+      throw new InternalServerErrorException('Something went wrong');
+    }
+    return new Task(
+      updatedTask.title,
+      updatedTask.description,
+      updatedTask.completed,
+    );
   }
 }
