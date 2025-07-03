@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskModule } from 'src/task/task.module';
 import { AuthController } from './interfaces/auth.controller';
@@ -11,7 +11,10 @@ import { GetAllUsersUseCase } from './application/usecases/get-all-users.usecase
 import { AuthGuard } from './infrastructure/guards/auth.guard';
 
 @Module({
-  imports: [TaskModule, TypeOrmModule.forFeature([UserOrmEntity])],
+  imports: [
+    forwardRef(() => TaskModule),
+    TypeOrmModule.forFeature([UserOrmEntity]),
+  ],
   controllers: [AuthController, UserController],
   providers: [
     { provide: 'UserRepository', useClass: UserTypeOrmRepository },
