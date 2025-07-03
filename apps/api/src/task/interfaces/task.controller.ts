@@ -5,6 +5,7 @@ import { GetAllTasksUseCase } from '../application/use-cases/get-all-tasks.useca
 import { AuthGuard } from 'src/auth/infrastructure/guards/auth.guard';
 import { EditTaskUseCase } from '../application/use-cases/edit-task.usecase';
 import { EditTaskDto } from '../application/dto/edit-task.dto';
+import { AssignTaskUseCase } from '../application/use-cases/assign-task.usecase';
 
 @Controller('task')
 export class TaskController {
@@ -12,6 +13,7 @@ export class TaskController {
     private readonly createTask: CreateTaskUseCase,
     private readonly getAllTasks: GetAllTasksUseCase,
     private readonly editTask: EditTaskUseCase,
+    private readonly assignTask: AssignTaskUseCase,
   ) {}
 
   @Post()
@@ -31,5 +33,11 @@ export class TaskController {
   @UseGuards(AuthGuard)
   async edit(@Body() dto: EditTaskDto) {
     return this.editTask.execute(dto);
+  }
+
+  @Post('/assign')
+  @UseGuards(AuthGuard)
+  async assign(@Body() dto: { taskId: number; login: string }) {
+    return this.assignTask.execute(dto.taskId, dto.login);
   }
 }

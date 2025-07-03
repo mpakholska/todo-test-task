@@ -17,15 +17,19 @@ export class TaskTypeOrmRepository implements TaskRepository {
     await this.repo.save(orm);
   }
 
-  async findAll(): Promise<Task[]> {
-    const todos = await this.repo.find();
-    return todos.map((t) => new Task(t.title, t.description, t.completed));
+  async findAll(): Promise<TaskOrmEntity[] | []> {
+    return await this.repo.find({
+      relations: ['users'],
+    });
   }
 
-  async findById(id: number): Promise<Task | null> {
-    const task = await this.repo.findOne({ where: { id } });
+  async findById(id: number): Promise<TaskOrmEntity | null> {
+    const task = await this.repo.findOne({
+      where: { id },
+      relations: ['users'],
+    });
     if (!task) return null;
-    return new Task(task.title, task.description, task.completed);
+    return task;
   }
 
   async update(id: number, task: Partial<Task>): Promise<Task | null> {

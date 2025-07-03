@@ -23,6 +23,6 @@ import { AuthGuard } from './infrastructure/guards/auth.guard';
     GetAllUsersUseCase,
     AuthGuard,
   ],
-  exports: [AuthGuard],
+  exports: ['UserRepository', AuthGuard],
 })
 export class AuthModule {}

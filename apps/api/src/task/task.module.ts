@@ -7,6 +7,7 @@ import { TaskTypeOrmRepository } from './infrastructure/persistance/task-typeorm
 import { GetAllTasksUseCase } from './application/use-cases/get-all-tasks.usecase';
 import { AuthModule } from 'src/auth/auth.module';
 import { EditTaskUseCase } from './application/use-cases/edit-task.usecase';
+import { AssignTaskUseCase } from './application/use-cases/assign-task.usecase';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { EditTaskUseCase } from './application/use-cases/edit-task.usecase';
     CreateTaskUseCase,
     GetAllTasksUseCase,
     EditTaskUseCase,
+    AssignTaskUseCase,
   ],
   exports: [TypeOrmModule],
 })
