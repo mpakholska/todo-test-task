@@ -19,8 +19,6 @@ export class TaskTypeOrmRepository implements TaskRepository {
 
   async findAll(): Promise<Task[]> {
     const todos = await this.repo.find();
-    return todos.map(
-      (t) => new Task(t.id, t.title, t.description, t.completed),
-    );
+    return todos.map((t) => new Task(t.title, t.description, t.completed));
   }
 }

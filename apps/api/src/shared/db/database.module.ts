@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from '../config/config';
-import { TaskOrmEntity } from 'src/task/infrastructure/persistance/task-typeorm.entity';
-import { Migration1751467533388 } from './migrations/1751467533388-migration';
+import { TaskOrmEntity } from '../../task/infrastructure/persistance/task-typeorm.entity';
+import { UserOrmEntity } from '../../auth/infrastructure/persistance/user-typeorm.entity';
 
 @Module({
   imports: [
@@ -13,8 +13,8 @@ import { Migration1751467533388 } from './migrations/1751467533388-migration';
       username: config.db.username,
       password: config.db.password,
       database: config.db.name,
-      entities: [TaskOrmEntity],
-      migrations: [Migration1751467533388],
+      entities: [TaskOrmEntity, UserOrmEntity],
+      migrations: [],
       synchronize: false,
     }),
   ],

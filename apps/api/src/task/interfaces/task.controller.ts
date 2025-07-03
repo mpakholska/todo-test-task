@@ -3,11 +3,11 @@ import { CreateTaskUseCase } from '../application/use-cases/create-task.usecase'
 import { CreateTaskDto } from '../application/dto/create-task.dto';
 import { GetAllTasksUseCase } from '../application/use-cases/get-all-tasks.usecase';
 
-
 @Controller('task')
 export class TaskController {
-  constructor(private readonly createTask: CreateTaskUseCase,
-    private readonly getAllTasks: GetAllTasksUseCase
+  constructor(
+    private readonly createTask: CreateTaskUseCase,
+    private readonly getAllTasks: GetAllTasksUseCase,
   ) {}
 
   @Post()
@@ -17,7 +17,7 @@ export class TaskController {
   }
 
   @Get()
-  async get(){
+  async get() {
     return this.getAllTasks.execute();
   }
 }

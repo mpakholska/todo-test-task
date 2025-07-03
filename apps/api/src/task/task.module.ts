@@ -12,7 +12,8 @@ import { GetAllTasksUseCase } from './application/use-cases/get-all-tasks.usecas
   providers: [
     { provide: 'TaskRepository', useClass: TaskTypeOrmRepository },
     CreateTaskUseCase,
-    GetAllTasksUseCase
+    GetAllTasksUseCase,
   ],
+  exports: [TypeOrmModule]
 })
 export class TaskModule {}

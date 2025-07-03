@@ -1,9 +1,8 @@
 import { registerAs } from '@nestjs/config';
-
-import { TaskOrmEntity } from '../../task/infrastructure/persistance/task-typeorm.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from '../config/config';
-import { Migration1751467533388 } from './migrations/1751467533388-migration';
+import { UserOrmEntity } from '../../auth/infrastructure/persistance/user-typeorm.entity';
+import { TaskOrmEntity } from '../../task/infrastructure/persistance/task-typeorm.entity';
 
 const configuration = {
   type: config.db.type,
@@ -12,13 +11,13 @@ const configuration = {
   username: config.db.username,
   password: config.db.password,
   database: config.db.name,
-  entities: [TaskOrmEntity],
-  migrations: [Migration1751467533388],
+  entities: [UserOrmEntity, TaskOrmEntity],
+  migrations: [],
   autoLoadEntities: true,
   synchronize: false,
 };
 
-export default registerAs('typeorm', () => config);
+export default registerAs('typeorm', () => configuration);
 export const connectionSource = new DataSource(
   configuration as DataSourceOptions,
 );

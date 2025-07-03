@@ -1,9 +1,10 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { UserOrmEntity } from '../../../auth/infrastructure/persistance/user-typeorm.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
 
 @Entity('task')
 export class TaskOrmEntity {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column()
   title: string;
@@ -13,4 +14,7 @@ export class TaskOrmEntity {
 
   @Column()
   completed: boolean;
+
+  @ManyToMany(() => UserOrmEntity, (user) => user.tasks)
+  users: UserOrmEntity[];
 }
