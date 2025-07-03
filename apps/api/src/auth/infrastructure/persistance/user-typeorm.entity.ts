@@ -1,4 +1,4 @@
-import { TaskOrmEntity } from 'src/task/infrastructure/persistance/task-typeorm.entity';
+import { TaskOrmEntity } from '../../../task/infrastructure/persistance/task-typeorm.entity';
 import {
   Entity,
   Column,
