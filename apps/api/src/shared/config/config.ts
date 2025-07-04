@@ -4,6 +4,7 @@ dotenvConfig({ path: '.env' });
 type Config = {
   common: {
     port: number;
+    origin: string;
   };
   db: {
     type: string;
@@ -21,6 +22,7 @@ type Config = {
 export const config: Config = {
   common: {
     port: Number(process.env.PORT) || 3000,
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000'
   },
   db: {
     type: process.env.DB_TYPE || 'postgres',

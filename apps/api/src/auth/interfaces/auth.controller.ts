@@ -12,7 +12,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  async register(@Body() dto: UserDto, @Res() res: Response) {
+  async register(@Body() dto: UserDto, @Res({ passthrough: true }) res: Response) {
     const token = await this.registerUser.execute(dto);
     res.cookie('token', token, {
       httpOnly: true,
