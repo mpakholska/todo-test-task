@@ -3,24 +3,37 @@ import { loginUser, logoutUser, registerUser } from "../services/auth";
 
 export function useRegister() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
 
   const register = useCallback(async (login: string, password: string) => {
     setLoading(true);
-    setError(null);
     try {
       const response = await registerUser(login, password);
-      localStorage.setItem("token", response);
-      return response;
+
+      console.log(response);
+
+      if (!response) {
+        throw new Error("No response received");
+      }
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+        return response.token;
+      } else {
+        throw new Error("No token received");
+      }
     } catch (e) {
-      setError(e as Error);
+      console.log(e);
       return null;
     } finally {
       setLoading(false);
     }
   }, []);
 
-  return { register, loading, error };
+  return { register, loading };
 }
 
 export function useLogin() {
@@ -32,9 +45,23 @@ export function useLogin() {
     setError(null);
     try {
       const response = await loginUser(login, password);
-      localStorage.setItem("token", response.data);
-      return response.data;
+
+      if (!response) {
+        throw new Error("No response received");
+      }
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+        return response.token;
+      } else {
+        throw new Error("No token received");
+      }
     } catch (e) {
+      console.log(e);
       setError(e as Error);
       return null;
     } finally {

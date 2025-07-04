@@ -1,16 +1,23 @@
+import { useLogin, useRegister } from "@/shared/hooks/auth";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function SignInForm() {
-  const [login, setLogin] = useState("");
+  const [loginValue, setLoginValue] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ login?: string; password?: string }>(
     {}
   );
 
+  const [isLogin, setIsLogin] = useState(true);
+
+  const {login: login, loading: loadingLogin} = useLogin();
+  const {register, loading: loadingRegister} = useRegister()
+
   const validate = () => {
     const newErrors: { login?: string; password?: string } = {};
-    if (!login.trim()) {
+    if (!loginValue.trim()) {
       newErrors.login = "Login is required";
     }
     if (!password) {
@@ -20,10 +27,25 @@ export default function SignInForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!validate()) return;
+  
+    let result={};
+  
+    if (isLogin) {
+      result = await login(loginValue, password);
+      if (!result) {
+        toast.error("Login failed. Please check your credentials.");
+      }
+    } else {
+      result = await register(loginValue, password);
+      if (!result) {
+        toast.error("Registration failed. Please try again.");
+      }
+    }
   };
+  
 
   return (
     <Paper elevation={3} sx={{ padding: 4, width: "100%" }}>
@@ -34,7 +56,7 @@ export default function SignInForm() {
         gutterBottom
         sx={{ color: "#fff", fontWeight: 700 }}
       >
-        Sign In
+        {isLogin? "Sign In": "Sign Up"}
       </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <TextField
@@ -43,8 +65,8 @@ export default function SignInForm() {
           fullWidth
           margin="normal"
           required
-          value={login}
-          onChange={(e) => setLogin(e.target.value)}
+          value={loginValue}
+          onChange={(e) => setLoginValue(e.target.value)}
           autoFocus
           error={!!errors.login}
           helperText={errors.login}
@@ -70,8 +92,9 @@ export default function SignInForm() {
           fullWidth
           sx={{ mt: 2 }}
           data-testid="submit-button"
+          disabled={loadingLogin || loadingRegister}
         >
-          Sign In
+          {isLogin? "Sign In": "Sign Up"}
         </Button>
 
         <Box
@@ -86,14 +109,15 @@ export default function SignInForm() {
             align="center"
             sx={{ mt: 2, cursor: "pointer", color: "white" }}
           >
-            Don`t have an account?
+            {isLogin? "Don`t have an account?": "Already have an account"}
           </Typography>
 
           <Typography
             align="center"
             sx={{ mt: 2, cursor: "pointer", color: "primary.main" }}
+            onClick={()=>setIsLogin(!isLogin)}
           >
-            Register
+            {isLogin? "Register": "Login"}
           </Typography>
         </Box>
       </Box>
