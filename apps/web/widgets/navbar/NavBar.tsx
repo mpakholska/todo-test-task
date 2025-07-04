@@ -42,7 +42,7 @@ export default function NavBar() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              My App
+              Tracking App
             </Typography>
             <Button color="inherit" onClick={goToTasks}>
               Tasks

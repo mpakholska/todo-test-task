@@ -18,16 +18,17 @@ export function useTasks() {
     setError(null);
     try {
       const response = await getAllTasks();
-      setData(response.data);
+      setData(response);
       return response;
     } catch (e) {
+      console.log(e)
       setError(e as Error);
       return null;
     } finally {
       setLoading(false);
     }
+  
   }, []);
-
   return { fetch, loading, error, data };
 }
 
