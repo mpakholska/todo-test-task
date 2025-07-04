@@ -12,6 +12,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/shared/hooks/auth";
 import ProtectedRoute from "@/shared/utils/ui/protected-route";
+import Link from "next/link";
 
 export default function NavBar() {
   const router = useRouter();
@@ -46,8 +47,8 @@ export default function NavBar() {
             <Button color="inherit" onClick={goToTasks}>
               Tasks
             </Button>
+            <Link href="/tasks/create">
             <Button
-              onClick={handleLogout}
               variant="contained"
               sx={{
                 backgroundColor: "#5865F2",
@@ -70,6 +71,7 @@ export default function NavBar() {
             >
               Create Task
             </Button>
+            </Link>
             <Button
               onClick={handleLogout}
               variant="contained"
