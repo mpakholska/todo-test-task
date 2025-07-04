@@ -21,7 +21,6 @@ export function useTasks() {
       setData(response);
       return response;
     } catch (e) {
-      console.log(e)
       setError(e as Error);
       return null;
     } finally {

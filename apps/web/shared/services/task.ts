@@ -4,8 +4,8 @@ export async function getAllTasks() {
   try {
     const response = await $api.get("/task");
     return response.data;
-  } catch (e) {
-    console.log(e);
+  } catch {
+    throw new Error("Error fetching tasks");
   }
 }
 
@@ -13,8 +13,8 @@ export async function createTask(title: string, description: string) {
   try {
     const response = await $api.post("/task", {title, description});
     return response.data;
-  } catch (e) {
-    console.log(e);
+  } catch {
+    throw new Error("Error creating task");
   }
 }
 
@@ -45,8 +45,8 @@ export async function editTask(
 
     const response = await $api.post("/task/edit", { ...values, id });
     return response.data;
-  } catch (e) {
-    console.log(e);
+  } catch {
+    throw new Error("Error editing task");
   }
 }
 
@@ -54,8 +54,8 @@ export async function assignTask(login: string, taskId: number) {
   try {
     const response = await $api.post("/task/assign", { login, taskId });
     return response.data;
-  } catch (e) {
-    console.log(e);
+  } catch {
+    throw new Error("Error assigning task");
   }
 }
 
@@ -63,7 +63,7 @@ export async function completeTask(completed: boolean) {
   try {
     const response = await $api.post("/task/edit", { completed });
     return response.data;
-  } catch (e) {
-    console.log(e);
+  } catch {
+    throw new Error("Error completing");
   }
 }

@@ -4,7 +4,7 @@ export async function getAllUsers() {
     try {
       const response = await $api.get("/users");
       return response.data;
-    } catch (e) {
-      console.log(e);
+    } catch {
+      throw new Error("Error fetching users");
     }
   }

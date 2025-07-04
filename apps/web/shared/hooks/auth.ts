@@ -9,8 +9,6 @@ export function useRegister() {
     try {
       const response = await registerUser(login, password);
 
-      console.log(response);
-
       if (!response) {
         throw new Error("No response received");
       }
@@ -25,8 +23,7 @@ export function useRegister() {
       } else {
         throw new Error("No token received");
       }
-    } catch (e) {
-      console.log(e);
+    } catch {
       return null;
     } finally {
       setLoading(false);
@@ -61,7 +58,6 @@ export function useLogin() {
         throw new Error("No token received");
       }
     } catch (e) {
-      console.log(e);
       setError(e as Error);
       return null;
     } finally {
