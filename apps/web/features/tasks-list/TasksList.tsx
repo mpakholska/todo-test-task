@@ -48,6 +48,7 @@ export default function TasksList() {
         <TaskCard
           key={task.id}
           title={task.title}
+          completed={task.completed}
           description={task.description}
           users={task.users as never}
         />
