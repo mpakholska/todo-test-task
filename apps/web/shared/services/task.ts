@@ -19,6 +19,7 @@ export async function createTask(title: string, description: string) {
 }
 
 export async function editTask(
+  id: number,
   title?: string,
   description?: string,
   completed?: boolean
@@ -42,7 +43,7 @@ export async function editTask(
       values.completed = completed;
     }
 
-    const response = await $api.post("/task/edit", { ...values });
+    const response = await $api.post("/task/edit", { ...values, id });
     return response.data;
   } catch (e) {
     console.log(e);

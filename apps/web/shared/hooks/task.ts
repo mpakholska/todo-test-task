@@ -58,11 +58,11 @@ export function useEditTask() {
   const [error, setError] = useState<Error | null>(null);
 
   const edit = useCallback(
-    async (title?: string, description?: string, completed?: boolean) => {
+    async (id: number, title?: string, description?: string, completed?: boolean) => {
       setLoading(true);
       setError(null);
       try {
-        const response = await editTask(title, description, completed);
+        const response = await editTask(id, title, description, completed);
         return response;
       } catch (e) {
         setError(e as Error);

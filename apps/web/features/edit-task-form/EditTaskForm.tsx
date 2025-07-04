@@ -1,5 +1,6 @@
 "use client";
 
+import { useAssignTask, useEditTask } from "@/shared/hooks/task";
 import { useUsers } from "@/shared/hooks/user";
 import {
   Box,
@@ -20,7 +21,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export type User = {
-  id: number;
   login: string;
 };
 
@@ -40,9 +40,14 @@ export default function EditTaskForm({ task }: EditTaskFormProps) {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
   const [completed, setCompleted] = useState(task.completed);
-  const [assignedUserIds, setAssignedUserIds] = useState<number[]>(
-    task.users.map((u) => u.id)
+  const [assignedUserLogin, setAssignedUserLogin] = useState<string>(
+    task.users.length > 0 ? task.users[0].login : ""
   );
+
+  const [assignedUsers, setAssignedUsers] = useState<User[]>(task.users);
+
+  const { assign } = useAssignTask();
+  const { edit } = useEditTask();
 
   const [errors, setErrors] = useState<{
     title?: string;
@@ -52,22 +57,45 @@ export default function EditTaskForm({ task }: EditTaskFormProps) {
 
   const validate = () => {
     const newErrors: typeof errors = {};
+
     if (!title.trim()) newErrors.title = "Title is required";
     if (!description.trim()) newErrors.description = "Description is required";
+
+    const hasChanged =
+      title !== task.title ||
+      description !== task.description ||
+      completed !== task.completed ||
+      JSON.stringify(assignedUsers) !== JSON.stringify(task.users);
+
+    if (!hasChanged) {
+      toast.error("The fields are the same as they were before!");
+      return;
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
-    toast.success("Task updated!");
+    const response = await edit( task.id,title, description, completed);
+    if (response) {
+      toast.success("Task updated!");
+    } else {
+      toast.error("Error editing task");
+    }
   };
 
-  const handleUserChange = (event: SelectChangeEvent<number[]>) => {
-    const value = event.target.value as number[];
-    setAssignedUserIds(value);
+  const handleUserChange = async (event: SelectChangeEvent<string>) => {
+    const response = await assign(event.target.value, task.id);
+    if (response) {
+      setAssignedUserLogin(event.target.value);
+      setAssignedUsers((prev) => [...prev, { login: event.target.value }]);
+    } else {
+      toast.error("Error assigning task");
+    }
   };
 
   useEffect(() => {
@@ -83,9 +111,13 @@ export default function EditTaskForm({ task }: EditTaskFormProps) {
         alignItems: "center",
         justifyContent: "center",
         background: "#202225",
+        pt: 10,
       }}
     >
-      <Paper elevation={3} sx={{ padding: 4}}>
+      <Paper
+        elevation={3}
+        sx={{ padding: 4, height: "80vh", overflowY: "auto" }}
+      >
         <Typography
           variant="h5"
           component="h2"
@@ -134,30 +166,85 @@ export default function EditTaskForm({ task }: EditTaskFormProps) {
             sx={{ mt: 1, color: "#dcddde" }}
           />
 
+          <Box
+            sx={{
+              mt: 1,
+              mb: 2,
+              p: 1,
+              backgroundColor: "rgba(114, 118, 125, 0.3)",
+              borderRadius: 1,
+              maxHeight: 120,
+              overflow: "auto",
+            }}
+          >
+            {assignedUsers.length > 0 ? (
+              assignedUsers.map((item) => (
+                <Typography
+                  key={item.login}
+                  variant="body2"
+                  sx={{
+                    fontSize: "0.8rem",
+                    color: "#dcddde",
+                    p: 0.5,
+                    "&:not(:last-child)": {
+                      borderBottom: "1px solid rgba(114, 118, 125, 0.5)",
+                    },
+                  }}
+                >
+                  {item.login}
+                </Typography>
+              ))
+            ) : (
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: "0.8rem",
+                  color: "#72767d",
+                  fontStyle: "italic",
+                  p: 0.5,
+                }}
+              >
+                No users assigned
+              </Typography>
+            )}
+          </Box>
+
           <FormControl fullWidth margin="normal">
-            <InputLabel id="assign-users-label" sx={{ color: "#72767d" }}>
-              Assign Users
+            <InputLabel id="assign-user-label" sx={{ color: "#72767d" }}>
+              Assign User
             </InputLabel>
             <Select
-              labelId="assign-users-label"
-              multiple
-              value={assignedUserIds}
+              labelId="assign-user-label"
+              value={assignedUserLogin}
               onChange={handleUserChange}
-              input={<OutlinedInput label="Assign Users" />}
-              renderValue={(selected) =>
-                selected
-                  .map((id) => users.find((u) => u.id === id)?.login)
-                  .join(", ")
-              }
+              input={<OutlinedInput label="Assign User" />}
+              renderValue={(selected) => selected || <em>No user selected</em>}
               sx={{
                 backgroundColor: "#2f3136",
                 color: "#dcddde",
+                "& .MuiSelect-icon": {
+                  color: "#dcddde",
+                },
               }}
             >
-              {users.map((user) => (
-                <MenuItem key={user.id} value={user.id}>
-                  <Checkbox checked={assignedUserIds.includes(user.id)} />
-                  <Typography sx={{ ml: 1 }}>{user.login}</Typography>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {users?.map((user) => (
+                <MenuItem
+                  key={user.login}
+                  value={user.login}
+                  sx={{
+                    backgroundColor:
+                      assignedUserLogin === user.login
+                        ? "#5865F255"
+                        : "inherit",
+                    "&:hover": {
+                      backgroundColor: "#5865F233",
+                    },
+                  }}
+                >
+                  {user.login}
                 </MenuItem>
               ))}
             </Select>
