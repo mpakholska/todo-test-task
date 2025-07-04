@@ -2,11 +2,29 @@
 
 import TaskCard from "@/entities/task-card/TaskCard";
 import { useTasks } from "@/shared/hooks/task";
+import { Task } from "@/shared/types/task";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
+
 import { useEffect } from "react";
 
 export default function TasksList() {
   const { loading, data: tasks, error, fetch } = useTasks();
+
+  const router = useRouter();
+
+  const handleEdit = (item: Task) => {
+    const task = {
+      id: item.id.toString(),
+      title: item.title,
+      description: item.description,
+      completed: item.completed.toString(),
+      users: JSON.stringify(item.users),
+    };
+
+    const params = new URLSearchParams(task).toString();
+    router.push(`/tasks/edit?${params}`);
+  };
 
   useEffect(() => {
     fetch();
@@ -46,11 +64,13 @@ export default function TasksList() {
     >
       {tasks.map((task) => (
         <TaskCard
+          id={task.id}
           key={task.id}
           title={task.title}
           completed={task.completed}
           description={task.description}
           users={task.users as never}
+          onEdit={()=>handleEdit(task)}
         />
       ))}
     </Box>

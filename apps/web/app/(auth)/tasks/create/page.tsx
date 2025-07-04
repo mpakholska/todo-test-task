@@ -1,6 +1,6 @@
 "use client";
 
-import AddTaskForm from "@/features/add-task-form/AddTaskForm";
+import AddTaskForm from "@/features/add-task-form";
 import { discordDarkTheme } from "@/shared/utils/styling/darkTheme";
 import ProtectedRoute from "@/shared/utils/ui/protected-route";
 import { ThemeProvider } from "@emotion/react";

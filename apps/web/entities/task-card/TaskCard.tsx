@@ -16,11 +16,12 @@ export type User = {
 };
 
 export type TaskCardProps = {
+  id: number;
   title: string;
   description: string;
   completed: boolean;
   users: User[];
-  onEdit?: () => void;
+  onEdit: ()=>void
 };
 
 export default function TaskCard({
@@ -28,8 +29,10 @@ export default function TaskCard({
   description,
   completed,
   users,
-  onEdit,
+  onEdit
 }: TaskCardProps) {
+ 
+
   return (
     <Card
       sx={{
@@ -46,15 +49,15 @@ export default function TaskCard({
             {title}
           </Typography>
           <Box display="flex" alignItems="center" gap={1}>
-              <Chip
-                label={completed?"Completed": "Incompleted"}
-                size="small"
-                sx={{
-                  backgroundColor: completed?"#43b581":"red",
-                  color: "#fff",
-                  fontWeight: 500,
-                }}
-              />
+            <Chip
+              label={completed ? "Completed" : "Incomplete"}
+              size="small"
+              sx={{
+                backgroundColor: completed ? "#43b581" : "#f04747",
+                color: "#fff",
+                fontWeight: 500,
+              }}
+            />
             <Tooltip title="Edit Task">
               <IconButton size="small" onClick={onEdit}>
                 <EditIcon sx={{ color: "#dcddde", fontSize: 20 }} />
