@@ -1,5 +1,6 @@
 import { useLogin, useRegister } from "@/shared/hooks/auth";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -9,11 +10,12 @@ export default function SignInForm() {
   const [errors, setErrors] = useState<{ login?: string; password?: string }>(
     {}
   );
-
   const [isLogin, setIsLogin] = useState(true);
 
   const {login: login, loading: loadingLogin} = useLogin();
   const {register, loading: loadingRegister} = useRegister()
+
+  const router = useRouter()
 
   const validate = () => {
     const newErrors: { login?: string; password?: string } = {};
@@ -43,6 +45,10 @@ export default function SignInForm() {
       if (!result) {
         toast.error("Registration failed. Please try again.");
       }
+    }
+
+    if(result) {
+      router.replace('/tasks')
     }
   };
   

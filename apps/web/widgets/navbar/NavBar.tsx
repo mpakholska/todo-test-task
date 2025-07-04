@@ -19,6 +19,7 @@ export default function NavBar() {
 
   const handleLogout = async () => {
     await logout();
+    router.replace("/");
   };
 
   const goToTasks = () => {
