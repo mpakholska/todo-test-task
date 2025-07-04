@@ -115,7 +115,7 @@ export default function Loader() {
             fontSize: "0.875rem",
           }}
         >
-          Checking authentication...
+          Waiting for the response ...
         </Typography>
 
         <Box

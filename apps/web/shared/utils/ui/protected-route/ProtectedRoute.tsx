@@ -1,4 +1,7 @@
 "use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Loader from "../loader";
 
 export default function ProtectedRoute({
@@ -6,9 +9,23 @@ export default function ProtectedRoute({
 }: {
   children: React.ReactNode;
 }) {
-  const isAuthenticated = localStorage.getItem('token')
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
-  if (isAuthenticated === null) {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      router.replace("/");
+    }
+
+    setLoading(false);
+  }, [router]);
+
+  if (loading) {
     return <Loader />;
   }
 
